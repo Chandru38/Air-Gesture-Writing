@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Air Gesture Writing</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <!-- Your CSS file -->
+  <link rel="stylesheet" href="styles.css"/>
+
+  <!-- MediaPipe JS Libraries (replaces Python mediapipe + opencv) -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- ── TOP BAR ── -->
+  <div class="topbar">
+    <div class="brand">Air<em>Write</em></div>
+
+    <div class="topbar-center">
+      <!-- Color buttons — same order as Python overlayList[0..3] -->
+      <button class="color-pick active" data-color="255,0,0"   style="background:#ff3b3b;" title="Red"></button>
+      <button class="color-pick"        data-color="0,0,255"   style="background:#3b8fff;" title="Blue"></button>
+      <button class="color-pick"        data-color="0,255,0"   style="background:#2ecc71;" title="Green"></button>
+      <button class="color-pick eraser" data-color="erase"                                 title="Eraser">🧹</button>
+
+      <div class="divider"></div>
+
+      <!-- Brush size slider -->
+      <div class="brush-wrap">
+        <span>SIZE</span>
+        <input type="range" id="brushSlider" min="2" max="25" value="4"/>
+        <span id="brushValLabel">4</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Live mode indicator -->
+      <div class="mode-badge" id="modeBadge">● IDLE</div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="status">
+        <div class="status-dot" id="statusDot"></div>
+        <span id="statusTxt">OFF</span>
+      </div>
+      <button class="btn" id="clearBtn">🗑 <span>Clear</span></button>
+      <button class="btn" id="saveBtn">💾 <span>Save</span></button>
+      <button class="btn danger" id="stopBtn">⏹ <span>Stop</span></button>
+    </div>
+  </div>
+
+  <!-- ── CAMERA + CANVAS AREA ── -->
+  <div class="main">
+    <video id="videoEl" playsinline></video>
+    <canvas id="outputCanvas"></canvas>
+
+    <!-- Keyboard shortcut hints -->
+    <div class="hud" id="hud">
+      <div class="hud-chip"><kbd>C</kbd> Clear</div>
+      <div class="hud-chip"><kbd>S</kbd> Save</div>
+      <div class="hud-chip"><kbd>ESC</kbd> Stop</div>
+    </div>
+
+    <!-- FPS display -->
+    <div id="fpsEl">-- fps</div>
+
+    <!-- Welcome / start screen -->
+    <div class="welcome" id="welcome">
+      <div class="welcome-icon">✋</div>
+      <h1>Air <span>Write</span></h1>
+      <p>Write and draw in mid-air using just your index finger. No touch, no stylus — just your hand.</p>
+
+      <div class="gesture-grid">
+        <div class="gesture-card">
+          <div class="gi">☝️</div>
+          <strong>Draw</strong>
+          Index finger up
+        </div>
+        <div class="gesture-card">
+          <div class="gi">✌️</div>
+          <strong>Select</strong>
+          Two fingers up
+        </div>
+        <div class="gesture-card">
+          <div class="gi">✊</div>
+          <strong>Pause</strong>
+          Close fist
+        </div>
+      </div>
+
+      <button class="btn-start" id="startBtn">⚡ Start Camera</button>
+    </div>
+  </div>
+
+  <!-- Your JS file — loaded at bottom so HTML is ready first -->
+  <script src="app.js"></script>
+
+</body>
+</html>
